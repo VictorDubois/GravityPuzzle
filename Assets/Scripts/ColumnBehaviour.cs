@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ColumnBehaviour : MonoBehaviour {
-	public Material color;
+	public Material columnColor;
+	public Material colorToReplace;
 	public bool fixedPosition;
 	public bool lastPlaced;
 	public bool upsideDown = false;
@@ -26,7 +27,7 @@ public class ColumnBehaviour : MonoBehaviour {
 
 	public ColumnBehaviour (Material newColor, bool isFixedPosition)
 	{
-		color = newColor;
+		columnColor = newColor;
 		fixedPosition = isFixedPosition;
 		lastPlaced = true;
 	}
@@ -80,9 +81,19 @@ public class ColumnBehaviour : MonoBehaviour {
 		}
 
 		Color currentColor;
+		Material currentMaterial;
 		for (int i = 0; i < materials.Length; i++)
 		{
-			currentColor = materials[i].color;
+			currentMaterial = materials[i];
+
+			// Test if the color is the color to replace with the color of the column
+			// Indeed, the color of the slide is to be replaced, but not the color of the frame (currently)
+			if (currentMaterial.color == colorToReplace.color)
+			{
+				currentMaterial = columnColor;
+			}
+			currentColor = currentMaterial.color;
+
 			materials[i].color = new Color(currentColor.r, currentColor.g, currentColor.b, 0.5f);
 		}
 
